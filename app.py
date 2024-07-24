@@ -98,8 +98,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .movie-card {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
     border-radius: 12px;
     padding: 1em;
@@ -107,7 +106,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
-    max-width: 800px; /* Added max-width for responsive cards */
+    max-width: 600px; /* Max-width for responsiveness */
 }
 
 .movie-card:hover {
@@ -117,7 +116,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .movie-poster {
     border-radius: 8px;
-    width: 200px; /* Adjusted size */
+    width: 100%;
+    max-width: 200px; /* Adjusted size */
     transition: transform 0.2s ease;
     margin-right: 20px; /* Space between poster and details */
 }
@@ -129,11 +129,10 @@ h1, h2, h3, h4, h5, h6 {
 .movie-details {
     text-align: left;
     padding: 0 20px;
-    max-width: calc(100% - 220px); /* Adjusted for poster width */
 }
 
 .movie-title {
-    font-size: 2em;
+    font-size: 1.8em;
     color: #ffdb58; /* Title color */
     font-weight: bold;
     margin-bottom: 0.5em;
@@ -145,12 +144,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .movie-overview {
-    font-size: 1.1em;
+    font-size: 1em;
     margin-bottom: 1em;
 }
 
 .movie-info {
-    font-size: 1em;
+    font-size: 0.9em;
     margin-top: 0.5em;
 }
 
@@ -184,6 +183,42 @@ footer {
     color: #f0f0f0;
     text-align: center;
     padding: 1em 0;
+}
+
+@media (min-width: 768px) {
+    .movie-card {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .movie-details {
+        text-align: left;
+        max-width: calc(100% - 220px); /* Adjusted for poster width */
+    }
+
+    .movie-poster {
+        margin-right: 20px; /* Space between poster and details */
+    }
+}
+
+@media (max-width: 767px) {
+    .movie-title {
+        font-size: 1.5em; /* Adjusted size for smaller screens */
+    }
+
+    .movie-details {
+        text-align: center;
+    }
+
+    .movie-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .movie-poster {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
 }
 </style>
 '''
@@ -230,14 +265,13 @@ if st.button('Recommend'):
                 <img src="{poster}" class="movie-poster"/>
                 <div class="movie-details">
                     <h2 class="movie-title">{title}</h2>
-                    <p class="movie-overview">{overview}</p>
+                    <p class="movie-overview"><strong>Overview:</strong> {overview}</p>
                     <p class="movie-info"><strong>Release Date:</strong> {release_date}</p>
                     <p class="movie-info"><strong>Rating:</strong> {rating}/10</p>
-                    <a href="{google_search_url}" target="_blank">Search for more about this movie</a>
+                    <div class="trailer-section">
+                        {f'<iframe width="560" height="315" src="{trailer_url}" frameborder="0" allowfullscreen></iframe>' if trailer_url else "<p>Trailer not available</p>"}
+                    </div>
                 </div>
-            </div>
-            <div class="trailer-section">
-                {f'<iframe width="560" height="315" src="{trailer_url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>' if trailer_url else '<p>No trailer available</p>'}
             </div>
             """,
             unsafe_allow_html=True)
